@@ -3,12 +3,9 @@ package org.deloitte.sms.studentregistration.beans;
 import java.io.Serializable;
 
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import org.springframework.stereotype.Component;
 
@@ -30,8 +27,9 @@ public class Student_Info implements Serializable{
 	private String guardian_Name;
     @Column(length=50)
 	private String address;
-    @OneToOne(targetEntity=Country_Info.class,cascade=CascadeType.ALL)
-	@JoinColumn(name="country_ID",referencedColumnName="country_ID")
+   /* @OneToOne(targetEntity=Country_Info.class,cascade=CascadeType.ALL)
+	@JoinColumn(name="country_ID",referencedColumnName="country_ID")*/
+    @Column(length=10)
    	private String country_ID;
     @Column(length=10)
 	private String contact_No;
@@ -39,8 +37,7 @@ public class Student_Info implements Serializable{
 	private String mail_ID;
 	@Column
     private char gender;
-	@OneToOne(targetEntity=Fees_Info.class,cascade=CascadeType.ALL)
-	@JoinColumn(name="standard",referencedColumnName="standard")
+	@Column(length=10)
     private String standard;
 	@Column
 	private char standard_Category;

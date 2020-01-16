@@ -2,10 +2,14 @@ package org.deloitte.sms.studentregistration.controller;
 
 import org.deloitte.sms.studentregistration.beans.Student_Info;
 import org.deloitte.sms.studentregistration.dao.StudentDao;
-import org.deloitte.sms.studentregistration.utils.CalculateNetFees;
+import org.deloitte.sms.studentregistration.utils.BusinessException;
+import org.deloitte.sms.studentregistration.utils.RegistrationBO;
+import org.deloitte.sms.studentregistration.utils.StudentAge;
+/*import org.deloitte.sms.studentregistration.utils.BusinessException;
+import org.deloitte.sms.studentregistration.utils.RegistrationBO;
+import org.deloitte.sms.studentregistration.utils.StudentAge;*/
 import org.deloitte.sms.studentregistration.utils.StudentCountryID;
 import org.deloitte.sms.studentregistration.utils.StudentID;
-import org.deloitte.sms.studentregistration.utils.StudentStandardCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,13 +27,21 @@ public class StudentController {
 	public String ShowRegdStudentForm(){
 		return "StudentRegistrationForm";
 	}
+	@RequestMapping(value="/errormsg", method=RequestMethod.GET)
+	public String ShowErrorPage(){
+		return "ErrorPage";
+	}
 	@RequestMapping(value="/addstudent", method=RequestMethod.POST)
 	public ModelAndView registerStudent(@ModelAttribute("student_Info") Student_Info student, 
 			@RequestParam("date_Of_Joining") String date_Of_Joining,
 			@RequestParam("country_Name") String country,
 			@RequestParam("state_Name") String state){
 		ModelAndView mav = new ModelAndView();
-		/*try{
+		try{
+			if(!(RegistrationBO.registerStudentVContact(student.getContact_No())))
+					throw new BusinessException("ERROR CODE 506:Invalid Contact No");	
+			if(!(RegistrationBO.registerStudentVName(student.getStudent_Name())))
+					throw new BusinessException("ERROR CODE 501:Invalid Student Name");	
 			if(!RegistrationBO.registerStudentVDOB(student.getDate_Of_Birth().toString()))
 				throw new BusinessException("ERROR CODE 504:Invalid DOB");
 			if(!RegistrationBO.registerStudentVDOJ(date_Of_Joining))
@@ -39,12 +51,14 @@ public class StudentController {
 		}
 		catch(BusinessException e){
 			System.out.println(e.getMessage());
-			mav.setViewName("redirect:addstudent");
-		}*/
+			mav.addObject("Error", e);
+			mav.setViewName("redirect:errormsg");
+			return mav;
+		}
 		student.setStudent_ID(StudentID.generateStudentID(10));
 		student.setCountry_ID(StudentCountryID.getCountryID(country, state));
 		dao.insertStudent(student);
-		System.out.println("ho gya sara");
+		mav.setViewName("SucessPage");
 		return mav;
 	}
 }

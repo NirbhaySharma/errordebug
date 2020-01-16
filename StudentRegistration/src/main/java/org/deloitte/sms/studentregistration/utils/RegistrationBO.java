@@ -64,7 +64,7 @@ public class RegistrationBO {
 	
 //	DOB Validation
 	public static boolean registerStudentVDOB(String dob){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = null;
 		try {
 			d = sdf.parse(dob);
@@ -87,7 +87,7 @@ public class RegistrationBO {
 	}
 //	DOJ Validation
 	public static boolean registerStudentVDOJ(String doj){
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date d = null;
 		try {
 			d = sdf.parse(doj);
